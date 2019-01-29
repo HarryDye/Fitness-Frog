@@ -20,7 +20,7 @@
 
                 <div class="form-group">
                     @Html.LabelFor(m => m.ActivityId, new { @class = "control-label" })
-                    @Html.DropDownListFor(m => m.ActivityId, 
+                    @Html.DropDownListFor(m => m.ActivityId,
                                             (SelectList)ViewBag.ActivitiesSelectListItems, "", new { @class = "form-control" })
                 </div>
 
@@ -29,6 +29,18 @@
                     @Html.TextBoxFor(m => m.Duration, new { @class = "form-control" })
                 </div>
 
+
+                @*https://stackoverflow.com/questions/972307/how-to-loop-through-all-enum-values-in-c
+        https://teamtreehouse.com/community/a-way-to-loop-through-enum-rather-than-typing-each-value
+
+                    a way to iterate over and save the unnessisary code:
+                    @foreach (Entry.IntensityLevel intensity in Enum.GetValues(typeof(Entry.IntensityLevel)))
+                        {
+                        <label class="radio-inline">
+                            @Html.RadioButtonFor(m => m.Intensity, intensity.ToString())
+                            @intensity.ToString()
+                        </label>
+                        }*@
                 <div class="form-group">
                     @Html.LabelFor(m => m.Intensity, new { @class = "control-label" })
                     <div>
@@ -48,7 +60,7 @@
                     @Html.LabelFor(m => m.Exclude, new { @class = "control-label" })
                     @Html.TextBoxFor(m => m.Exclude, new { @class = "form-control" })
                     @*@Html.Label("Exclude", new { @class = "control-label" })
-                    @Html.TextBox("Exclude", null, new { @class = "form-control" })*@
+            @Html.TextBox("Exclude", null, new { @class = "form-control" })*@
                 </div>
 
             </div>

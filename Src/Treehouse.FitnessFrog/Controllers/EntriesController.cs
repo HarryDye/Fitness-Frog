@@ -45,24 +45,17 @@ namespace Treehouse.FitnessFrog.Controllers
             {
                 Date = DateTime.Today
             };
-
-            ViewBag.ActivitiesSelectListItems = new SelectList( Data.Data.Activities, "Id", "Name" );
+            SetupActivitiesSelectListItems();
 
             return View(entry);
         }
 
+        
+
         [HttpPost]
         public ActionResult Add(Entry entry)
         {
-            //this is a global error message
-            //ModelState.AddModelError("", "This is a test for global string");
-
-            //no duration field validation errors, make sure that duration is greater than 0
-            //server side validation
-            if(ModelState.IsValidField("Duration") && entry.Duration <= 0)
-            {
-                ModelState.AddModelError("Duration", "Duration field must be greater than '0'");
-            }
+            ValidateEntry(entry);
 
             if (ModelState.IsValid)
             {
@@ -71,19 +64,51 @@ namespace Treehouse.FitnessFrog.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ActivitiesSelectListItems = new SelectList(Data.Data.Activities, "Id", "Name");
+            SetupActivitiesSelectListItems();
 
             return View(entry);
         }
 
+        
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            //TODO get request from repo
+            Entry entry = _entriesRepository.GetEntry((int)id);
+            //TODO return status of not found if entry not found
+            if(entry == null)
+            {
+                return HttpNotFound();
+            }
+            //TODO populate the activityies select list items ViewBag property
+            SetupActivitiesSelectListItems();
+            //TODO pass the entry in the view
+            return View(entry);
+        }
 
-            return View();
+        [HttpPost]
+        public ActionResult Edit(Entry entry)
+        {
+
+            //TODO validate the entry
+            ValidateEntry(entry);
+
+            //TODO if the entry  is valid... 
+                // 1.use the repo to update the entry
+                // 2.redirect the user to the "entries" list page
+                if(ModelState.IsValid)
+            {
+                _entriesRepository.UpdateEntry(entry);
+
+                return RedirectToAction("Index");
+            }
+            //TODO populate the activities selevt list items ViewBag property
+            SetupActivitiesSelectListItems();
+
+            return View(entry);
         }
 
         public ActionResult Delete(int? id)
@@ -95,5 +120,23 @@ namespace Treehouse.FitnessFrog.Controllers
 
             return View();
         }
+
+        private void ValidateEntry(Entry entry)
+        {
+            //this is a global error message
+            //ModelState.AddModelError("", "This is a test for global string");
+
+            //no duration field validation errors, make sure that duration is greater than 0
+            //server side validation
+            if (ModelState.IsValidField("Duration") && entry.Duration <= 0)
+            {
+                ModelState.AddModelError("Duration", "Duration field must be greater than '0'");
+            }
+        }
+        private void SetupActivitiesSelectListItems()
+        {
+            ViewBag.ActivitiesSelectListItems = new SelectList(Data.Data.Activities, "Id", "Name");
+        }
     }
 }
+

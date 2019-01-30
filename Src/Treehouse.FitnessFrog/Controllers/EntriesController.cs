@@ -54,6 +54,9 @@ namespace Treehouse.FitnessFrog.Controllers
         [HttpPost]
         public ActionResult Add(Entry entry)
         {
+            //this is a global error message
+            //ModelState.AddModelError("", "This is a test for global string");
+
             //no duration field validation errors, make sure that duration is greater than 0
             //server side validation
             if(ModelState.IsValidField("Duration") && entry.Duration <= 0)
